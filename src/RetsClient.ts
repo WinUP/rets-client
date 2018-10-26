@@ -125,7 +125,7 @@ export class RetsClient {
      * Send GetObject request
      * @param options GetObject options
      */
-    public async getObjects(options: IRetsObjectOptions): Promise<IRetsObject | IRetsObject[]> {
+    public async getObjects(options: IRetsObjectOptions, timeout = 2147483640): Promise<IRetsObject | IRetsObject[]> {
         const action = this.findRequest(RetsAction.GetObject).defaults({
             headers: {
                 ...this.headers,
@@ -133,7 +133,7 @@ export class RetsClient {
             },
             encoding: null
         });
-        const response = await this.sendAction(action, combineObjectOptions(options));
+        const response = await this.sendAction(action, combineObjectOptions(options), timeout);
         if (response instanceof Error) { throw response; }
         return (response.body instanceof Array ? response.body : [response.body]) as IRetsObject[];
     }
@@ -157,10 +157,16 @@ export class RetsClient {
         return this.actions[action];
     }
 
-    private async sendAction(action: DefaultUriUrlRequestApi<Request, CoreOptions, OptionalUriUrl>, query?: any): Promise<IRetsResponse> {
+    /**
+     *
+     * @param action
+     * @param query optional
+     * @param timeout optional request timeout, whem timeout returns a error
+     */
+    private async sendAction(action: DefaultUriUrlRequestApi<Request, CoreOptions, OptionalUriUrl>, query?: any, timeout = 2147483640): Promise<IRetsResponse> {
         const data = await new Promise<{ response: Response, body: any }>((resolve, reject) =>
             action(
-                { [this.configuration.method === RetsRequestMethod.POST ? 'form' : 'qs']: query },
+                { [this.configuration.method === RetsRequestMethod.POST ? 'form' : 'qs']: query, timeout: timeout},
                 (e, r, b) => {
                     if (e) {
                         reject(e);
