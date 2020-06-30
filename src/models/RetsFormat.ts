@@ -3,6 +3,10 @@
  */
 export enum RetsFormat {
     /**
+     * Compact data (usually TSV)
+     */
+    Compact = 'COMPACT',
+    /**
      * Compact decoded data (usually TSV)
      */
     CompactDecoded = 'COMPACT-DECODED',
