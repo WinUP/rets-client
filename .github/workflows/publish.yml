@@ -1,0 +1,40 @@
+name: Publish package
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Prepare environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Compile code
+        run: |
+          npm install
+          npm run tsc
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Prepare environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+          registry-url: https://registry.npmjs.org/
+      - name: Build package
+        run: |
+          npm install
+          npm run tsc
+      - name: Publish package
+        run: |
+          npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
