@@ -1,7 +1,13 @@
 import { trim } from 'lodash';
 
 export function normalizeKey(input: string): string {
-    return input.replace(/[\s-]+/g, '');
+    // some servers return lowercase headers
+    return input.split(/[\s-]+/g).map(part => {
+      if(/^[a-z]/.test(part) === true) {
+        return part.charAt(0).toUpperCase() + part.slice(1)
+      }
+      return part
+    }).join('');
 }
 
 export function processHeaders(headers?: string[]): { [key: string]: string | string[] } {
