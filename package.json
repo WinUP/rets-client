@@ -2,8 +2,8 @@
   "name": "rets-ddf-client",
   "version": "1.2.10",
   "description": "A RETS (Real Estate Transaction Standard) and DDF (Data Distribution Facility) client.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "private": false,
   "dependencies": {
     "lodash.clonedeep": "^4.5.0",
@@ -15,7 +15,7 @@
   "scripts": {
     "prestart": "tsc",
     "test": "node test.js",
-    "tsc": "tsc"
+    "tsc": "tsc -m CommonJS --outDir dist/cjs && tsc -m ES2015 --outDir dist/esm"
   },
   "devDependencies": {
     "@types/lodash.clonedeep": "^4.5.6",
