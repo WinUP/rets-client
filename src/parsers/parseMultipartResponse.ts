@@ -1,4 +1,5 @@
-import { trim, flatten } from 'lodash';
+import flatten from 'lodash.flatten';
+import trim from 'lodash.trim';
 
 import { IRetsObject, RetsProcessingError } from '../models';
 import { detectContentEncoding } from '../tools/detectContentEncoding';
@@ -10,7 +11,7 @@ const LINE_SPLITTER = Buffer.from('\r\n');
 const PART_SPLITTER = Buffer.from('\r\n\r\n');
 
 export async function parseMultipartResponse(body: Buffer, headers: { [key: string]: string | string[] }): Promise<IRetsObject[]> {
-    const encoding = detectContentEncoding(headers);
+    const encoding = detectContentEncoding(headers) as BufferEncoding;
     const boundary = Buffer.from(findBoundary(headers), encoding);
     const result: IRetsObject[] = [];
     for (let i = -1, length = body.length; i < length;) {
@@ -27,7 +28,7 @@ export async function parseMultipartResponse(body: Buffer, headers: { [key: stri
             result.push(await parseObjectResponse(headerItems[headerItems.length - 1], {
                 ...headers,
                 ...processHeaders(flatten(headerItems.slice(0, headerItems.length - 1).map(v =>
-                    [v.substring(0, v.indexOf(':')), trim(v.substring((v.indexOf(':') + 1)))]
+                    [v.substring(0, v.indexOf(':')), v.substring((v.indexOf(':') + 1)).trim()]
                 )))
             }));
             i = nextBoundayIndex;
@@ -37,7 +38,7 @@ export async function parseMultipartResponse(body: Buffer, headers: { [key: stri
             result.push(await parseObjectResponse(content, {
                 ...headers,
                 ...processHeaders(flatten(headerText.split('\r\n').map(v =>
-                    [v.substring(0, v.indexOf(':')), trim(v.substring((v.indexOf(':') + 1)))]
+                    [v.substring(0, v.indexOf(':')), v.substring((v.indexOf(':') + 1)).trim()]
                 )))
             }));
             i = nextBoundayIndex + LINE_SPLITTER.length;

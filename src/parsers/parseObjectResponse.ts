@@ -25,6 +25,6 @@ export async function parseObjectResponse(body: any, headers: { [key: string]: s
         return result;
     }
     // 文本编码
-    result.content = body instanceof Buffer ? body : Buffer.from(body, detectContentEncoding(headers));
+    result.content = body instanceof Buffer ? body : Buffer.from(body, detectContentEncoding(headers) as BufferEncoding);
     return result;
 }

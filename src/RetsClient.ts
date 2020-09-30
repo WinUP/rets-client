@@ -1,5 +1,5 @@
 import { createHash } from 'crypto';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash.clonedeep';
 
 import {
     DefaultUriUrlRequestApi, Request, CoreOptions, OptionalUriUrl, RequestAPI, RequiredUriUrl, Response,

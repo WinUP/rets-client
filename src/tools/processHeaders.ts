@@ -1,4 +1,4 @@
-import { trim } from 'lodash';
+import trim from 'lodash.trim';
 
 export function normalizeKey(input: string): string {
     // some servers return lowercase headers
