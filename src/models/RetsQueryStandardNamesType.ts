@@ -9,5 +9,5 @@ export enum RetsQueryStandardNamesType {
     /**
      * Use StandardName for query
      */
-    UseStandarsName = 1
+    UseStandardName = 1
 }
