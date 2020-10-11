@@ -1,6 +1,6 @@
 {
   "name": "rets-ddf-client",
-  "version": "1.2.10",
+  "version": "1.2.11",
   "description": "A RETS (Real Estate Transaction Standard) and DDF (Data Distribution Facility) client.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
